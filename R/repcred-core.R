@@ -73,6 +73,8 @@ getNormalSeqNumColor <- function(total_num,normal_num){
     return(color)
 }
 
+
+#' @export
 getCoreStats <- function(data){
     data = na.omit(data)
     min <- range(data)[1]
@@ -105,17 +107,21 @@ render_report <- function(rep, outdir,genome,sumrep) {
     }
     
     
-    
+
+    #setwd("../rstudio/templates/project/project_files/")
+
     
     # render
-    book <- bookdown::render_book(
-        input = ".",
-        output_format='bookdown::gitbook',
-        config_file ="_bookdown.yml",
-        clean=FALSE,
-        new_session=FALSE, clean_envir=FALSE,
-        params=list("rep"=rep, outdir=outdir,"genome_file"=genome,full_or_basic=sumrep))
-
+    xfun::in_dir(
+        outdir,
+        book <- bookdown::render_book(
+            input = ".",
+            output_format='bookdown::gitbook',
+            config_file ="_bookdown.yml",
+            clean=FALSE,
+            new_session=FALSE, clean_envir=FALSE,
+            params=list("rep"=rep, outdir=outdir,"genome_file"=genome,full_or_basic=sumrep))
+    )
     book
 }
 

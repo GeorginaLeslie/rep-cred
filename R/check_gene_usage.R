@@ -2,8 +2,8 @@
 #'Latest code update: 
 #'
 #'
-library(stringr)
-library(data.table)
+# library(stringr)
+# library(data.table)
 
 #''getGeneUsageFrequency' counts the proportional frequency of each gene. 
 #'If there are multiple v-calls for a single sequence their value is equal to
@@ -88,6 +88,7 @@ getUniqueGenes<-function(gene_freq_list){
 #'Gets all genes present. Single genes are taken alonw , multi-gene calls are split up 
 #'and their proportions are calculated.
 #'
+#' @export
 getGeneData <- function(file){
   gene_data = data.table(gene=character(),proportion=double()) 
   v_call_row = file$v_call

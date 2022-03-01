@@ -2,6 +2,7 @@
 title: "Credibility of a repertoire report"
 author: ""
 date: "Updated: `r date()`"
+knit: "bookdown::render_book"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: "references.bib"
@@ -26,7 +27,7 @@ params:
    cache: FALSE
    rep:  !r system.file("extdata", "ExampleDb.tsv", package = "repcred")
    outdir: !r tempdir()
-   genome_file: !r FALSE
+   genome_file: !r NULL
    full_or_basic: !r FALSE
 ---
 
@@ -73,7 +74,7 @@ red = "pink"
 
 
 ```{r warning=FALSE}
-repertoire <- read_airr(params$rep)
+repertoire <- read_rearrangement(params$rep)
 repertoire <- as.data.table(repertoire)
 repertoire_dt <-fread(params$rep)
 
@@ -126,7 +127,7 @@ kbl(prod_info)
 non_prod = getFullRatioNonProductive(repertoire)$non_prod
 if(!is.na(non_prod) & non_prod > 0){
 ambig_non_prod_data <- fullCheckNonProductiveSeqs(repertoire_dt)
-'# print(ambig_non_prod_data)
+print(ambig_non_prod_data)
 kbl(ambig_non_prod_data)
  total_num=prod_data[[2]]
 values = c(ambig_non_prod_data[[1]],ambig_non_prod_data[[2]],ambig_non_prod_data[[3]],total_num)
@@ -139,7 +140,7 @@ barplot(values,names.arg = labels,col="light blue",xlab="Occurences" ,main="Non-
 knitr::kable(as.data.table(ambig_non_prod_data),col.names = labels)
 # 
  kbl(non_prod_table) %>% kableExtra::column_spec(1,color="white",background=getPercColor(total_num,values[[1]])) %>% column_spec(2,color="white",background=getPercColor(total_num,values[[2]])) %>% column_spec(3,color="white",background=getNormalSeqNumColor(total_num,values[[3]]))
-'#
+
 }else{
    print("There were no non-productive sequences present in the dataset")
 }
@@ -283,7 +284,14 @@ nearestNeighbourDistInfo(repertoire)
 
 #  Physiochemical Statistics
 
-```{r warning=TRUE,results="asis"}
+```{r}
+if (all(is.na(repertoire_dt$junction_aa))) {
+    print("Skipping this section: `juncation_aa` is empty.")
+}
+```
+
+
+```{r warning=TRUE,results="asis",eval=!all(is.na(repertoire_dt$junction_aa))}
 #SECTION 8
 plot(0:1,xaxt='n',yaxt='n',ann=FALSE)
 legend("center",c("Mean +- standard dev","5% and 95% quantile points","Min and Max Value points"),fill=c("Dark blue","light blue","red"))
