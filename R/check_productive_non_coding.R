@@ -5,14 +5,17 @@ stop_codons = c("TAG","TAA","TGA")
 checkForReverseComplement <- function(file,seq_data){
   seqs_data<- as.data.table(seq_data)
   row_count = 0
+ 
   for(rows in file$rev_comp){
+    if(!is.na(rows)){
     row_count = row_count+1
     if(row_count %in% seqs_data[,2]){
       if(rows == 'T'|as.character(rows)=='TRUE'){
         row_to_change <- which(seqs_data[,2] == row_count)
         seq <-(seqs_data[row_to_change,1])
         seqs_data[row_to_change,1] <- reverseComplement(DNAString(seq))
-        
+    }
+    
       }
     }
   }
@@ -59,7 +62,7 @@ fullCheckNonProductiveSeqs <- function(file){
   non_productive_ambig =0
   non_productive_norm =0
   non_productive_with_stop=0
-  for(sequence in converted_seqs$seq_list){
+  '#for(sequence in converted_seqs$seq_list){
       stop_codons_present=findStopCodons(sequence)
       non_coding_nucleo_present=checkNonCodingNucleotides(sequence)
     
@@ -78,7 +81,8 @@ fullCheckNonProductiveSeqs <- function(file){
      
   
    return(list(non_productive_ambig,non_productive_with_stop,non_productive_norm,total_num))
-}
+'#
+  }
 
 
 getFullRatioNonProductive <- function(file){

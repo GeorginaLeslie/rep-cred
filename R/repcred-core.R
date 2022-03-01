@@ -100,8 +100,11 @@ render_report <- function(rep, outdir,genome,sumrep) {
 
     # Create project in outdir
     invisible(repcred_project(outdir))
+    if(grepl('project_files', getwd(), fixed=TRUE)== FALSE){
+    setwd("../rstudio/templates/project/project_files/")    
+    }
     
-    setwd("../rstudio/templates/project/project_files/")
+    
     
     
     # render

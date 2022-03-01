@@ -34,12 +34,12 @@ checkCDR3<- function(data){
       seq_ids_vector = c(seq_ids_vector,seq_id)
       row_number = c(row_number,row_count)
     }else{
-      if(!is.na(junction_val) | junction_val != "" ){
+      if(!anyNA(junction_val) & junction_val != "" ){
         cdr3_seqs = c(cdr3_seqs,junction_val[[1]])
         row_number = c(row_number,row_count)
         seq_ids_vector = c(seq_ids_vector,seq_id)
       }else{
-        if(data[row_count, rev_comp,with=FALSE]=="TRUE" | data[row_count, rev_comp,with=FALSE] =='T'){
+        if(all(!is.na(data[row_count, rev_comp,with=FALSE])) &(data[row_count, rev_comp,with=FALSE]=="TRUE" | data[row_count, rev_comp,with=FALSE] =='T')){
           seq=reverseComplement(DNAString(seq))
           cdr3_seqs = c(cdr3_seqs,substr(toString(seq),start_num,end_num)  )
           row_number = c(row_number,row_count)
@@ -51,10 +51,9 @@ checkCDR3<- function(data){
         }
       }
       
-      
-    } 
-
-  }
+    }
+  }     
+  
  return(cdr3_seq_info <- data.frame(row_number,cdr3_seqs,seqs_ids= seq_ids_vector))}
 
 

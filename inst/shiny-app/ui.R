@@ -30,7 +30,7 @@ ui <- fluidPage(
             
           
            actionButton("go", "Test Repertoire"),
-             
+           includeScript('button_disable.js'),    
             # Output
             uiOutput("openResultsBtn")
            
